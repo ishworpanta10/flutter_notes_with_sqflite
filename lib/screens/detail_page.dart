@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../cubit/cubit.dart';
 import '../database/notes_db.dart';
 import '../model/notes_model.dart';
 import 'add_edit_note.dart';
@@ -79,17 +81,20 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
         if (isLoading) {
           return;
         }
+        //TODO EDit note
         await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AddEditNote(note: note),
+          builder: (context) => AddNote(),
         ));
-        await getNote();
+        await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
       });
 
   Widget deleteButton() => IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () async {
           await NotesDatabase.instance.delete(widget.noteId);
+
           Navigator.of(context).pop();
+          await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
         },
       );
 }

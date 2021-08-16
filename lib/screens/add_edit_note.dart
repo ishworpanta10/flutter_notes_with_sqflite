@@ -1,109 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../database/notes_db.dart';
-import '../model/notes_model.dart';
+import '../cubit/add_note_cubit/add_note_cubit.dart';
 import '../widget/note_form_widget.dart';
 
-class AddEditNote extends StatefulWidget {
-  const AddEditNote({
-    Key? key,
-    this.note,
-  }) : super(key: key);
-
-  final Note? note;
-
-  @override
-  _AddEditNoteState createState() => _AddEditNoteState();
-}
-
-class _AddEditNoteState extends State<AddEditNote> {
+class AddNote extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  late bool isImportant;
-  late int number;
-  late String title;
-  late String description;
-
-  @override
-  void initState() {
-    super.initState();
-    isImportant = widget.note?.isImportant ?? false;
-    number = widget.note?.number ?? 0;
-    title = widget.note?.title ?? '';
-    description = widget.note?.description ?? '';
-  }
-
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          actions: [buildButton()],
+          actions: [buildButton(context)],
         ),
         body: Form(
           key: _formKey,
           child: NoteFormWidget(
-            isImportant: isImportant,
-            number: number,
-            title: title,
-            description: description,
-            onChangedImportant: (isImportant) => setState(() => this.isImportant = isImportant),
-            onChangedNumber: (number) => setState(() => this.number = number),
-            onChangedTitle: (title) => setState(() => this.title = title),
-            onChangedDescription: (description) => setState(() => this.description = description),
+            onChangedImportant: (isImportant) {
+              context.read<AddNoteCubit>().changeImpSwitch(isImp: isImportant);
+            },
+            onChangedNumber: (number) {
+              context.read<AddNoteCubit>().numberChanged(number: number);
+            },
+            onChangedTitle: (title) {
+              context.read<AddNoteCubit>().titleChanged(title: title);
+            },
+            onChangedDescription: (description) {
+              context.read<AddNoteCubit>().descriptionChanged(description: description);
+            },
           ),
         ),
       );
 
-  Widget buildButton() {
-    final isFormValid = title.isNotEmpty && description.isNotEmpty;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          onPrimary: Colors.white,
-          primary: isFormValid ? null : Colors.grey.shade700,
-        ),
-        onPressed: addOrUpdateNote,
-        child: widget.note == null ? const Text('Save') : const Text('Update'),
-      ),
+  Widget buildButton(BuildContext context) {
+    return BlocBuilder<AddNoteCubit, AddNoteState>(
+      builder: (context, state) {
+        final validAddNote = state.noteDesc.trim().isNotEmpty && state.noteDesc.trim().isNotEmpty;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              onPrimary: Colors.white,
+              // primary: validNote ? Colors.blue : Colors.grey.shade700,
+            ),
+            onPressed: validAddNote ? () => _addNote(context) : null,
+            child: const Text('Save'),
+          ),
+        );
+      },
     );
   }
 
-  Future<void> addOrUpdateNote() async {
-    final isValid = _formKey.currentState!.validate();
-
-    if (isValid) {
-      final isUpdating = widget.note != null;
-
-      if (isUpdating) {
-        await updateNote();
-      } else {
-        await addNote();
-      }
-
-      Navigator.of(context).pop();
+  Future<void> _addNote(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      await context.read<AddNoteCubit>().addNote();
+      Navigator.pop(context);
     }
   }
 
-  Future updateNote() async {
-    final note = widget.note!.copyWith(
-      isImportant: isImportant,
-      number: number,
-      title: title,
-      description: description,
-    );
-
-    await NotesDatabase.instance.update(note);
-  }
-
-  Future addNote() async {
-    final note = Note(
-      title: title,
-      isImportant: isImportant,
-      number: number,
-      description: description,
-      createdTime: DateTime.now(),
-    );
-
-    await NotesDatabase.instance.create(note);
-  }
+  // Future<void> addOrUpdateNote(BuildContext context, AddNoteState state) async {
+  //   final isFormValid = _formKey.currentState!.validate();
+  //
+  //   if (isFormValid) {
+  //     final isUpdating = note != null;
+  //     if (isUpdating) {
+  //       // await updateNote();
+  //     } else {
+  //       await addNote(state);
+  //     }
+  //     Navigator.of(context).pop();
+  //   }
+  // }
+  //
+  // // Future updateNote() async {
+  // //   final updatedNote = note.copyWith(
+  // //     isImportant: isImportant,
+  // //     number: number,
+  // //     title: title,
+  // //     description: description,
+  // //   );
+  // //
+  // //   await NotesDatabase.instance.update(note);
+  // // }
+  //
+  // Future addNote(AddNoteState state) async {
+  //   final note = Note(
+  //     title: sta,
+  //     isImportant: isImportant,
+  //     number: number,
+  //     description: description,
+  //     createdTime: DateTime.now(),
+  //   );
+  //
+  //   await NotesDatabase.instance.create(note);
+  // }
 }

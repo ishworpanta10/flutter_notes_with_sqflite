@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/add_note_cubit/add_note_cubit.dart';
 
 class NoteFormWidget extends StatelessWidget {
   const NoteFormWidget({
     Key? key,
-    this.isImportant = false,
-    this.number = 0,
-    this.title = '',
-    this.description = '',
+    this.isImportant,
+    this.number,
+    this.title,
+    this.description,
     required this.onChangedImportant,
     required this.onChangedNumber,
     required this.onChangedTitle,
@@ -39,11 +42,15 @@ class NoteFormWidget extends StatelessWidget {
               //   divisions: 5,
               //   onChanged: (number) => onChangedNumber(number.toInt()),
               // ),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                value: isImportant ?? false,
-                onChanged: onChangedImportant,
-                title: const Text("Is Important"),
+              BlocBuilder<AddNoteCubit, AddNoteState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: state.isImp,
+                    onChanged: onChangedImportant,
+                    title: const Text("Is Important"),
+                  );
+                },
               ),
             ],
           ),

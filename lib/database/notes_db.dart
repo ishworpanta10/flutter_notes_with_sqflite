@@ -70,7 +70,7 @@ CREATE TABLE $TableNotes (
     // final id = await db.rawInsert('INSERT INTO $TableNotes ($columns) VALUES ($values)');
 
     final id = await db.insert(TableNotes, note.toJson());
-    print("Note created Id: $id");
+    // print("Note created Id: $id");
     //assigning new created note id to id field of Note model and returning note model
     return note.copyWith(id: id);
   }
