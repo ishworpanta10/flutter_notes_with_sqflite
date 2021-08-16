@@ -62,6 +62,7 @@ class NoteFormWidget extends StatelessWidget {
           hintText: 'Title',
           hintStyle: TextStyle(color: Colors.white70),
         ),
+        textInputAction: TextInputAction.next,
         validator: (title) => title != null && title.isEmpty ? 'The title cannot be empty' : null,
         onChanged: onChangedTitle,
       );

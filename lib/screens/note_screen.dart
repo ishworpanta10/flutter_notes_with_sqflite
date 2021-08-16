@@ -42,7 +42,6 @@ class _NotesScreenState extends State<NotesScreen> {
             'Notes',
             style: TextStyle(fontSize: 24),
           ),
-          actions: const [Icon(Icons.search), SizedBox(width: 12)],
         ),
         body: Center(
           child: isLoading

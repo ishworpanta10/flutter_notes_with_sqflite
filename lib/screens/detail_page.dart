@@ -36,15 +36,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   }
 
   @override
-  void dispose() {
-    dbInstance.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          actions: [editButton(), deleteButton()],
+          actions: [
+            editButton(),
+            deleteButton(),
+          ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())

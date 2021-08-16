@@ -63,7 +63,7 @@ class _AddEditNoteState extends State<AddEditNote> {
           primary: isFormValid ? null : Colors.grey.shade700,
         ),
         onPressed: addOrUpdateNote,
-        child: const Text('Save'),
+        child: widget.note == null ? const Text('Save') : const Text('Update'),
       ),
     );
   }
