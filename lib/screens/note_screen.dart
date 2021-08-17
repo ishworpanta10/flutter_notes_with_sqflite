@@ -12,7 +12,7 @@ import 'detail_page.dart';
 class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("===============Build Called===============");
+    // print("===============Build Called===============");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
