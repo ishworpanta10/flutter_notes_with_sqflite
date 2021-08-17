@@ -17,7 +17,6 @@ class NoteDetailPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () async {
-              await context.read<NoteFetchCubit>().fetchAllNotes();
               Navigator.pop(context);
             },
           ),

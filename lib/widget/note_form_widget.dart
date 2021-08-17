@@ -28,7 +28,6 @@ class NoteFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Is Importants value $isImportant");
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),

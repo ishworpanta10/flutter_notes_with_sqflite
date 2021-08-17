@@ -46,9 +46,8 @@ class EditNoteCubit extends Cubit<EditNoteState> {
   Future<void> editNote({required Note note}) async {
     emit(state.copyWith(status: EditNoteStateStatus.submitting));
     try {
-      print("Bool value state ${state.isImp}");
-      print("Bool value initial ${note.isImportant}");
-
+      // print("Bool value state ${state.isImp}");
+      // print("Bool value initial ${note.isImportant}");
       final updatedNote = note.copyWith(
         title: state.noteTitle.isNotEmpty ? state.noteTitle : note.title,
         description: state.noteDesc.isNotEmpty ? state.noteDesc : note.description,
