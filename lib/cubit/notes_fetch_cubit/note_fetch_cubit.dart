@@ -25,4 +25,22 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
       );
     }
   }
+
+  Future<Note?> fetchSingleNote({required int id}) async {
+    emit(state.copyWith(status: NoteFetchStatus.loading));
+    try {
+      final note = await NotesDatabase.instance.readNote(id);
+      emit(
+        state.copyWith(note: note, status: NoteFetchStatus.loaded),
+      );
+      return note;
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: NoteFetchStatus.error,
+          errorMessage: "Something went wrong !",
+        ),
+      );
+    }
+  }
 }

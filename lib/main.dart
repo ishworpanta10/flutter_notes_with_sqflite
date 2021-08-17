@@ -19,6 +19,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddNoteCubit>(
           create: (_) => AddNoteCubit(),
         ),
+        BlocProvider<EditNoteCubit>(
+          create: (_) => EditNoteCubit(
+            noteFetchCubit: NoteFetchCubit(),
+          ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

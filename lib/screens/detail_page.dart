@@ -5,96 +5,85 @@ import 'package:intl/intl.dart';
 import '../cubit/cubit.dart';
 import '../database/notes_db.dart';
 import '../model/notes_model.dart';
-import 'add_edit_note.dart';
+import 'edit_note.dart';
 
-class NoteDetailPage extends StatefulWidget {
-  const NoteDetailPage({
-    Key? key,
-    required this.noteId,
-  }) : super(key: key);
-
-  final int noteId;
-
-  @override
-  _NoteDetailPageState createState() => _NoteDetailPageState();
-}
-
-class _NoteDetailPageState extends State<NoteDetailPage> {
-  final dbInstance = NotesDatabase.instance;
-
-  late Note note;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    getNote();
-  }
-
-  Future getNote() async {
-    setState(() => isLoading = true);
-    note = await dbInstance.readNote(widget.noteId);
-    setState(() => isLoading = false);
-  }
+class NoteDetailPage extends StatelessWidget {
+  const NoteDetailPage({Key? key, required this.note}) : super(key: key);
+  final Note note;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              await context.read<NoteFetchCubit>().fetchAllNotes();
+              Navigator.pop(context);
+            },
+          ),
           actions: [
-            editButton(),
-            deleteButton(),
+            _editButton(context, note),
+            _deleteButton(context, note.id!),
           ],
         ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: const EdgeInsets.all(12),
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  children: [
-                    Text(
-                      note.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+        body: Center(
+          child: BlocBuilder<NoteFetchCubit, NoteFetchState>(
+            builder: (context, state) {
+              switch (state.status) {
+                case NoteFetchStatus.loading:
+                  return const CircularProgressIndicator();
+
+                case NoteFetchStatus.error:
+                  return Text(state.errorMessage);
+
+                default:
+                  return Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      children: [
+                        Text(
+                          state.note?.title ?? note.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          DateFormat.yMMMd().format(note.createdTime),
+                          style: const TextStyle(color: Colors.white38),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.note?.description ?? note.description,
+                          style: const TextStyle(color: Colors.white70, fontSize: 18),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      DateFormat.yMMMd().format(note.createdTime),
-                      style: const TextStyle(color: Colors.white38),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      note.description,
-                      style: const TextStyle(color: Colors.white70, fontSize: 18),
-                    )
-                  ],
-                ),
-              ),
+                  );
+              }
+            },
+          ),
+        ),
       );
 
-  Widget editButton() => IconButton(
-      icon: const Icon(Icons.edit_outlined),
-      onPressed: () async {
-        if (isLoading) {
-          return;
-        }
-        //TODO EDit note
-        await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => AddNote(),
-        ));
-        await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
-      });
+  Widget _editButton(BuildContext context, Note note) => IconButton(
+        icon: const Icon(Icons.edit_outlined),
+        onPressed: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => EditNote(note: note),
+          ));
+          await context.read<NoteFetchCubit>().fetchSingleNote(id: note.id!);
+        },
+      );
 
-  Widget deleteButton() => IconButton(
+  Widget _deleteButton(BuildContext context, int id) => IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () async {
-          await NotesDatabase.instance.delete(widget.noteId);
-
+          await NotesDatabase.instance.delete(id);
           Navigator.of(context).pop();
-          await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
         },
       );
 }

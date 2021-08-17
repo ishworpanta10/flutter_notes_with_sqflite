@@ -31,9 +31,14 @@ class AddNoteCubit extends Cubit<AddNoteState> {
     emit(AddNoteState.initial());
   }
 
+  Future<void> deleteNote({required int id}) async {
+    await NotesDatabase.instance.delete(id);
+  }
+
   Future<void> addNote() async {
     emit(state.copyWith(status: AddNoteStateStatus.submitting));
     try {
+      print("Bool value ${state.isImp}");
       final note = Note(
         title: state.noteTitle,
         description: state.noteDesc,
@@ -42,29 +47,6 @@ class AddNoteCubit extends Cubit<AddNoteState> {
         createdTime: DateTime.now(),
       );
       await NotesDatabase.instance.create(note);
-      emit(AddNoteState.initial());
-      emit(state.copyWith(status: AddNoteStateStatus.submitted));
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: AddNoteStateStatus.error,
-          errorMessage: "can not add note",
-        ),
-      );
-      // print("Something Unknown Error: ${e}");
-    }
-  }
-
-  Future<void> updateNote({required Note note}) async {
-    emit(state.copyWith(status: AddNoteStateStatus.submitting));
-    try {
-      final updatedNote = note.copyWith(
-        title: state.noteTitle,
-        description: state.noteDesc,
-        number: state.noteNumber,
-        isImportant: state.isImp,
-      );
-      await NotesDatabase.instance.update(updatedNote);
       emit(AddNoteState.initial());
       emit(state.copyWith(status: AddNoteStateStatus.submitted));
     } catch (e) {

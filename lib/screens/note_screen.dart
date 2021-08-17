@@ -6,13 +6,13 @@ import '../cubit/cubit.dart';
 import '../cubit/notes_fetch_cubit/note_fetch_cubit.dart';
 import '../model/notes_model.dart';
 import '../widget/note_card_widget.dart';
-import 'add_edit_note.dart';
+import 'add_note.dart';
 import 'detail_page.dart';
 
 class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // print("===============Build Called===============");
+    print("===============Build Called===============");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -32,7 +32,7 @@ class NotesScreen extends StatelessWidget {
                 return Text(state.errorMessage);
 
               default:
-                return buildNotes(notes: state.noteList);
+                return _buildNotes(notes: state.noteList);
             }
           },
         ),
@@ -49,7 +49,7 @@ class NotesScreen extends StatelessWidget {
     );
   }
 
-  Widget buildNotes({required List<Note> notes}) => notes.isEmpty
+  Widget _buildNotes({required List<Note> notes}) => notes.isEmpty
       ? const Text("No Notes")
       : StaggeredGridView.countBuilder(
           padding: const EdgeInsets.all(8),
@@ -65,7 +65,7 @@ class NotesScreen extends StatelessWidget {
               onTap: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => NoteDetailPage(noteId: note.id!),
+                    builder: (context) => NoteDetailPage(note: note),
                   ),
                 );
                 await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
