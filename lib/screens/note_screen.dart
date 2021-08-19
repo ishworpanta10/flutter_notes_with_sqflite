@@ -9,7 +9,18 @@ import '../widget/note_card_widget.dart';
 import 'add_note.dart';
 import 'detail_page.dart';
 
-class NotesScreen extends StatelessWidget {
+class NotesScreen extends StatefulWidget {
+  @override
+  _NotesScreenState createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // print("===============Build Called===============");
@@ -65,7 +76,7 @@ class NotesScreen extends StatelessWidget {
               onTap: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => NoteDetailPage(note: note),
+                    builder: (context) => NoteDetailPage(id: note.id!),
                   ),
                 );
                 await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();

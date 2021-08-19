@@ -8,20 +8,24 @@ class NoteFormWidget extends StatelessWidget {
   const NoteFormWidget({
     Key? key,
     this.isImportant,
+    this.isFav,
     this.number,
     this.title,
     this.description,
     required this.onChangedImportant,
+    required this.onChangedFav,
     required this.onChangedNumber,
     required this.onChangedTitle,
     required this.onChangedDescription,
   }) : super(key: key);
 
   final bool? isImportant;
+  final bool? isFav;
   final int? number;
   final String? title;
   final String? description;
   final ValueChanged<bool> onChangedImportant;
+  final ValueChanged<bool> onChangedFav;
   final ValueChanged<int> onChangedNumber;
   final ValueChanged<String> onChangedTitle;
   final ValueChanged<String> onChangedDescription;
@@ -63,6 +67,28 @@ class NoteFormWidget extends StatelessWidget {
                     value: state.isImp == null ? isImportant! : state.isImp!,
                     onChanged: onChangedImportant,
                     title: const Text("Is Important"),
+                  );
+                },
+              ),
+            if (isFav == null)
+              BlocBuilder<AddNoteCubit, AddNoteState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: state.isFav,
+                    onChanged: onChangedFav,
+                    title: const Text("Is Favourite"),
+                  );
+                },
+              )
+            else
+              BlocBuilder<EditNoteCubit, EditNoteState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: state.isFav == null ? isFav! : state.isFav!,
+                    onChanged: onChangedFav,
+                    title: const Text("Is Favourite"),
                   );
                 },
               ),

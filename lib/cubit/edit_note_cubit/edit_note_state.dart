@@ -9,6 +9,7 @@ class EditNoteState extends Equatable {
     required this.noteDesc,
     required this.noteNumber,
     this.isImp,
+    this.isFav,
     required this.status,
     required this.errorMessage,
   });
@@ -18,7 +19,6 @@ class EditNoteState extends Equatable {
       id: "",
       noteTitle: "",
       noteDesc: "",
-      isImp: null,
       noteNumber: 0,
       status: EditNoteStateStatus.initial,
       errorMessage: "",
@@ -31,6 +31,7 @@ class EditNoteState extends Equatable {
     String? noteDesc,
     int? noteNumber,
     bool? isImp,
+    bool? isFav,
     EditNoteStateStatus? status,
     String? errorMessage,
   }) {
@@ -40,6 +41,7 @@ class EditNoteState extends Equatable {
       noteDesc: noteDesc ?? this.noteDesc,
       noteNumber: noteNumber ?? this.noteNumber,
       isImp: isImp ?? this.isImp,
+      isFav: isFav ?? this.isFav,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -50,9 +52,10 @@ class EditNoteState extends Equatable {
   final String noteDesc;
   final int noteNumber;
   final bool? isImp;
+  final bool? isFav;
   final EditNoteStateStatus status;
   final String errorMessage;
 
   @override
-  List<Object?> get props => [id, noteTitle, noteDesc, noteNumber, isImp, status, errorMessage];
+  List<Object?> get props => [id, noteTitle, noteDesc, noteNumber, isImp, isFav, status, errorMessage];
 }

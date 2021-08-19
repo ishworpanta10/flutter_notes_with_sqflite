@@ -17,6 +17,7 @@ class EditNoteCubit extends Cubit<EditNoteState> {
       noteDesc: note?.description,
       noteNumber: note?.number,
       isImp: note?.isImportant,
+      isFav: note?.isFav,
     ));
   }
   final NoteFetchCubit _noteFetchCubit;
@@ -39,6 +40,10 @@ class EditNoteCubit extends Cubit<EditNoteState> {
     emit(state.copyWith(isImp: isImp));
   }
 
+  void changeFavSwitch({required bool isFav}) {
+    emit(state.copyWith(isFav: isFav));
+  }
+
   void resetForm() {
     emit(EditNoteState.initial());
   }
@@ -53,6 +58,7 @@ class EditNoteCubit extends Cubit<EditNoteState> {
         description: state.noteDesc.isNotEmpty ? state.noteDesc : note.description,
         number: state.noteNumber != note.number ? state.noteNumber : note.number,
         isImportant: state.isImp != note.isImportant ? state.isImp : note.isImportant,
+        isFav: state.isFav != note.isFav ? state.isFav : note.isFav,
       );
 
       await NotesDatabase.instance.update(updatedNote);

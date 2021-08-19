@@ -51,6 +51,7 @@ class NotesDatabase {
 CREATE TABLE $TableNotes ( 
   $Id $idType, 
   $IsImportant $boolType,
+  $IsFav $boolType,
   $Number $integerType,
   $Title $textType,
   $Description $textType,
@@ -58,7 +59,7 @@ CREATE TABLE $TableNotes (
   )
 ''');
     //  we can creating other multiple tables here with db.execute('');
-  }
+  } //creating database
 
   //CRUD For Note Model
   Future<Note> create(Note note) async {

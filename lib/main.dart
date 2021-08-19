@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NoteFetchCubit>(
-          create: (_) => NoteFetchCubit()..fetchAllNotes(),
+          create: (_) => NoteFetchCubit(),
         ),
         BlocProvider<AddNoteCubit>(
           create: (_) => AddNoteCubit(),

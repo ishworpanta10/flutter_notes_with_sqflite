@@ -8,6 +8,7 @@ class AddNoteState extends Equatable {
     required this.noteDesc,
     required this.noteNumber,
     required this.isImp,
+    required this.isFav,
     required this.status,
     required this.errorMessage,
   });
@@ -17,6 +18,7 @@ class AddNoteState extends Equatable {
       noteTitle: "",
       noteDesc: "",
       isImp: false,
+      isFav: false,
       noteNumber: 0,
       status: AddNoteStateStatus.initial,
       errorMessage: "",
@@ -28,6 +30,7 @@ class AddNoteState extends Equatable {
     String? noteDesc,
     int? noteNumber,
     bool? isImp,
+    bool? isFav,
     AddNoteStateStatus? status,
     String? errorMessage,
   }) {
@@ -36,6 +39,7 @@ class AddNoteState extends Equatable {
       noteDesc: noteDesc ?? this.noteDesc,
       noteNumber: noteNumber ?? this.noteNumber,
       isImp: isImp ?? this.isImp,
+      isFav: isFav ?? this.isFav,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -45,9 +49,10 @@ class AddNoteState extends Equatable {
   final String noteDesc;
   final int noteNumber;
   final bool isImp;
+  final bool isFav;
   final AddNoteStateStatus status;
   final String errorMessage;
 
   @override
-  List<Object?> get props => [noteTitle, noteDesc, noteNumber, isImp, status, errorMessage];
+  List<Object?> get props => [noteTitle, noteDesc, noteNumber, isImp, isFav, status, errorMessage];
 }

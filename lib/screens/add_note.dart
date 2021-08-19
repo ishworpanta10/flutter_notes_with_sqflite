@@ -17,6 +17,9 @@ class AddNote extends StatelessWidget {
             onChangedImportant: (isImportant) {
               context.read<AddNoteCubit>().changeImpSwitch(isImp: isImportant);
             },
+            onChangedFav: (isFav) {
+              context.read<AddNoteCubit>().changeFavSwitch(isFav: isFav);
+            },
             onChangedNumber: (number) {
               context.read<AddNoteCubit>().numberChanged(number: number);
             },

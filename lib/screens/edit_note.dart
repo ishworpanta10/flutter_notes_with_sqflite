@@ -21,9 +21,13 @@ class EditNote extends StatelessWidget {
             title: note.title,
             description: note.description,
             isImportant: note.isImportant,
+            isFav: note.isFav,
             number: note.number,
             onChangedImportant: (isImportant) {
               context.read<EditNoteCubit>().changeImpSwitch(isImp: isImportant);
+            },
+            onChangedFav: (isFav) {
+              context.read<EditNoteCubit>().changeFavSwitch(isFav: isFav);
             },
             onChangedNumber: (number) {
               context.read<EditNoteCubit>().numberChanged(number: number);

@@ -27,6 +27,10 @@ class AddNoteCubit extends Cubit<AddNoteState> {
     emit(state.copyWith(isImp: isImp));
   }
 
+  void changeFavSwitch({required bool isFav}) {
+    emit(state.copyWith(isFav: isFav));
+  }
+
   void resetForm() {
     emit(AddNoteState.initial());
   }
@@ -38,12 +42,13 @@ class AddNoteCubit extends Cubit<AddNoteState> {
   Future<void> addNote() async {
     emit(state.copyWith(status: AddNoteStateStatus.submitting));
     try {
-      print("Bool value ${state.isImp}");
+      // print("Bool value ${state.isImp}");
       final note = Note(
         title: state.noteTitle,
         description: state.noteDesc,
         number: state.noteNumber,
         isImportant: state.isImp,
+        isFav: state.isFav,
         createdTime: DateTime.now(),
       );
       await NotesDatabase.instance.create(note);
