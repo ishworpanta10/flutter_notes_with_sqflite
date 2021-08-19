@@ -36,12 +36,13 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           default:
             return Scaffold(
               appBar: AppBar(
-                // leading: IconButton(
-                //   onPressed: () {
-                //     Navigator.pop(context, false);
-                //   },
-                //   icon: const Icon(Icons.baby_changing_station),
-                // ),
+                leading: IconButton(
+                  onPressed: () {
+                    BlocProvider.of<EditNoteCubit>(context).resetForm();
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                ),
                 actions: [
                   _editButton(context, state.note!),
                   _deleteButton(context, state.note!.id!),
@@ -69,9 +70,36 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                             state.note!.isImportant ? Icons.label_important : null,
                             color: Colors.teal,
                           ),
-                          Icon(
-                            state.note!.isFav ? Icons.favorite : null,
-                            color: Colors.red,
+                          BlocBuilder<EditNoteCubit, EditNoteState>(
+                            builder: (context, isFavState) {
+                              return IconButton(
+                                onPressed: () {
+                                  BlocProvider.of<EditNoteCubit>(context)
+                                    ..favToggle(isFav: isFavState.isFav == null ? !state.note!.isFav : !isFavState.isFav!)
+                                    ..editNote(
+                                      note: state.note!.copyWith(
+                                        isFav: isFavState.isFav == null ? !state.note!.isFav : !isFavState.isFav!,
+                                      ),
+                                    );
+                                },
+                                icon: Icon(
+                                  isFavState.isFav == null
+                                      ? state.note!.isFav
+                                          ? Icons.favorite
+                                          : Icons.favorite_border
+                                      : isFavState.isFav!
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                  color: isFavState.isFav == null
+                                      ? state.note!.isFav
+                                          ? Colors.red
+                                          : null
+                                      : isFavState.isFav!
+                                          ? Colors.red
+                                          : null,
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

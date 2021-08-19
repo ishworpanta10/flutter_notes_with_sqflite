@@ -62,6 +62,7 @@ class EditNote extends StatelessWidget {
   Future<void> _updateNote(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       await context.read<EditNoteCubit>().editNote(note: note);
+      context.read<EditNoteCubit>().resetForm();
       Navigator.pop(context);
     }
   }

@@ -66,7 +66,6 @@ class EditNoteCubit extends Cubit<EditNoteState> {
       );
 
       await NotesDatabase.instance.update(updatedNote);
-      emit(EditNoteState.initial());
       emit(state.copyWith(status: EditNoteStateStatus.updated));
     } catch (e) {
       emit(
