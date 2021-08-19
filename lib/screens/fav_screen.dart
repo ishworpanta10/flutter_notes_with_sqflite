@@ -42,7 +42,7 @@ class _FavScreenState extends State<FavScreen> {
                 return Text(state.errorMessage);
 
               default:
-                return _buildNotes(notes: state.noteList);
+                return _buildNotes(context, notes: state.noteList);
             }
           },
         ),
@@ -59,7 +59,7 @@ class _FavScreenState extends State<FavScreen> {
     );
   }
 
-  Widget _buildNotes({required List<Note> notes}) => notes.isEmpty
+  Widget _buildNotes(BuildContext myContext, {required List<Note> notes}) => notes.isEmpty
       ? const Text("No Favourite Notes")
       : StaggeredGridView.countBuilder(
           padding: const EdgeInsets.all(8),
@@ -68,7 +68,7 @@ class _FavScreenState extends State<FavScreen> {
           crossAxisCount: 4,
           mainAxisSpacing: 4,
           crossAxisSpacing: 4,
-          itemBuilder: (context, index) {
+          itemBuilder: (_, index) {
             final note = notes[index];
 
             return GestureDetector(
@@ -78,7 +78,7 @@ class _FavScreenState extends State<FavScreen> {
                     builder: (context) => NoteDetailPage(id: note.id!),
                   ),
                 );
-                await BlocProvider.of<NoteFetchCubit>(context).fetchAllFavNotes();
+                await BlocProvider.of<NoteFetchCubit>(myContext).fetchAllFavNotes();
               },
               child: NoteCardWidget(note: note, index: index),
             );

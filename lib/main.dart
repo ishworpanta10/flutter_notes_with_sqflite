@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_notes_sqflite/screens/note_screen.dart';
 
 import 'cubit/cubit.dart';
-import 'screens/note_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,3 +35,22 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+/*
+
+class Home extends InheritedWidget {
+  const Home({required Widget child, required this.dataToAccess}) : super(child: child);
+
+  final String dataToAccess;
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
+
+  static Home? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<Home>();
+}
+
+//method to access
+   // final data = context.dependOnInheritedWidgetOfExactType<Home>()!.dataToAccess;
+    // print("Data from inherited Widget $data");
+    // final data = Home.of(context)!.dataToAccess;
+    // print("data $data");
+*/

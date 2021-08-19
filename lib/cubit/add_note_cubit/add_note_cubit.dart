@@ -31,6 +31,10 @@ class AddNoteCubit extends Cubit<AddNoteState> {
     emit(state.copyWith(isFav: isFav));
   }
 
+  void favToggle({required bool isFav}) {
+    emit(state.copyWith(isFav: isFav));
+  }
+
   void resetForm() {
     emit(AddNoteState.initial());
   }

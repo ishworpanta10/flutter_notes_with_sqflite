@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_notes_sqflite/cubit/cubit.dart';
+import 'package:flutter_notes_sqflite/widget/toggle_button_widget.dart';
 
 import '../cubit/add_note_cubit/add_note_cubit.dart';
 
@@ -48,6 +49,7 @@ class NoteFormWidget extends StatelessWidget {
             //   divisions: 5,
             //   onChanged: (number) => onChangedNumber(number.toInt()),
             // ),
+            //Adding first time we have inImp as null
             if (isImportant == null)
               BlocBuilder<AddNoteCubit, AddNoteState>(
                 builder: (context, state) {
@@ -60,6 +62,7 @@ class NoteFormWidget extends StatelessWidget {
                 },
               )
             else
+              //Updating so we pass value
               BlocBuilder<EditNoteCubit, EditNoteState>(
                 builder: (context, state) {
                   return SwitchListTile(
@@ -71,24 +74,42 @@ class NoteFormWidget extends StatelessWidget {
                 },
               ),
             if (isFav == null)
+              //Adding
               BlocBuilder<AddNoteCubit, AddNoteState>(
                 builder: (context, state) {
-                  return SwitchListTile(
+                  return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    value: state.isFav,
-                    onChanged: onChangedFav,
-                    title: const Text("Is Favourite"),
+                    title: const Text("Favourite"),
+                    trailing: IconButton(
+                      icon: state.isFav
+                          ? const Icon(
+                              Icons.favorite_outlined,
+                              color: Colors.red,
+                            )
+                          : const Icon(
+                              Icons.favorite_border,
+                            ),
+                      onPressed: () {
+                        context.read<AddNoteCubit>().favToggle(isFav: !state.isFav);
+                      },
+                    ),
                   );
                 },
               )
             else
+              //updating
               BlocBuilder<EditNoteCubit, EditNoteState>(
                 builder: (context, state) {
-                  return SwitchListTile(
+                  return ListTile(
                     contentPadding: EdgeInsets.zero,
-                    value: state.isFav == null ? isFav! : state.isFav!,
-                    onChanged: onChangedFav,
-                    title: const Text("Is Favourite"),
+                    title: const Text("Favourite"),
+                    trailing: IconToggleButton(
+                      isSelected: state.isFav == null ? isFav! : state.isFav!,
+                      onPressed: () {
+                        context.read<EditNoteCubit>().favToggle(isFav: state.isFav == null ? !isFav! : !state.isFav!);
+                        // print("After btn press isFva ${state.isFav}");
+                      },
+                    ),
                   );
                 },
               ),

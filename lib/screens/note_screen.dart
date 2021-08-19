@@ -29,7 +29,7 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   @override
-  Widget build(BuildContext mainContext) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -45,7 +45,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   builder: (_) => FavScreen(),
                 ),
               );
-              await BlocProvider.of<NoteFetchCubit>(mainContext).fetchAllNotes();
+              await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
             },
             icon: const Icon(
               Icons.favorite,
@@ -66,7 +66,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
               default:
                 return _buildNotes(
-                  mainContext,
+                  context,
                   notes: state.noteList,
                 );
             }
@@ -85,7 +85,7 @@ class _NotesScreenState extends State<NotesScreen> {
     );
   }
 
-  Widget _buildNotes(BuildContext mainContext, {required List<Note> notes}) => notes.isEmpty
+  Widget _buildNotes(BuildContext myContext, {required List<Note> notes}) => notes.isEmpty
       ? const Text("No Notes")
       : StaggeredGridView.countBuilder(
           padding: const EdgeInsets.all(8),
@@ -99,12 +99,12 @@ class _NotesScreenState extends State<NotesScreen> {
 
             return GestureDetector(
               onTap: () async {
-                await Navigator.of(mainContext).push(
+                await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (mainContext) => NoteDetailPage(id: note.id!),
+                    builder: (_) => NoteDetailPage(id: note.id!),
                   ),
                 );
-                await BlocProvider.of<NoteFetchCubit>(mainContext).fetchAllNotes();
+                await BlocProvider.of<NoteFetchCubit>(myContext).fetchAllNotes();
               },
               child: NoteCardWidget(note: note, index: index),
             );
