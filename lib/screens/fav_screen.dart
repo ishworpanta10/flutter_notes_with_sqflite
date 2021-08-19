@@ -17,8 +17,8 @@ class FavScreen extends StatefulWidget {
 class _FavScreenState extends State<FavScreen> {
   @override
   void initState() {
-    BlocProvider.of<NoteFetchCubit>(context).fetchAllFavNotes();
     super.initState();
+    BlocProvider.of<NoteFetchCubit>(context).fetchAllFavNotes();
   }
 
   @override

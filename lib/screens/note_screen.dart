@@ -18,8 +18,8 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   @override
   void initState() {
-    BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
     super.initState();
+    BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
   }
 
   @override
@@ -29,8 +29,7 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // print("===============Build Called===============");
+  Widget build(BuildContext mainContext) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -46,7 +45,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   builder: (_) => FavScreen(),
                 ),
               );
-              await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
+              await BlocProvider.of<NoteFetchCubit>(mainContext).fetchAllNotes();
             },
             icon: const Icon(
               Icons.favorite,
@@ -58,7 +57,6 @@ class _NotesScreenState extends State<NotesScreen> {
       body: Center(
         child: BlocBuilder<NoteFetchCubit, NoteFetchState>(
           builder: (context, state) {
-            // print("Bullder called");
             switch (state.status) {
               case NoteFetchStatus.loading:
                 return const CircularProgressIndicator();
@@ -67,7 +65,10 @@ class _NotesScreenState extends State<NotesScreen> {
                 return Text(state.errorMessage);
 
               default:
-                return _buildNotes(notes: state.noteList);
+                return _buildNotes(
+                  mainContext,
+                  notes: state.noteList,
+                );
             }
           },
         ),
@@ -84,7 +85,7 @@ class _NotesScreenState extends State<NotesScreen> {
     );
   }
 
-  Widget _buildNotes({required List<Note> notes}) => notes.isEmpty
+  Widget _buildNotes(BuildContext mainContext, {required List<Note> notes}) => notes.isEmpty
       ? const Text("No Notes")
       : StaggeredGridView.countBuilder(
           padding: const EdgeInsets.all(8),
@@ -98,12 +99,12 @@ class _NotesScreenState extends State<NotesScreen> {
 
             return GestureDetector(
               onTap: () async {
-                await Navigator.of(context).push(
+                await Navigator.of(mainContext).push(
                   MaterialPageRoute(
-                    builder: (context) => NoteDetailPage(id: note.id!),
+                    builder: (mainContext) => NoteDetailPage(id: note.id!),
                   ),
                 );
-                await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
+                await BlocProvider.of<NoteFetchCubit>(mainContext).fetchAllNotes();
               },
               child: NoteCardWidget(note: note, index: index),
             );

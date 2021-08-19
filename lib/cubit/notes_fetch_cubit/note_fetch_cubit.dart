@@ -10,7 +10,7 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
   NoteFetchCubit() : super(NoteFetchState.initial());
 
   Future<void> fetchAllNotes() async {
-    print("fetch All Called");
+    // print("fetch All Called");
 
     emit(state.copyWith(status: NoteFetchStatus.loading));
     try {
@@ -29,7 +29,7 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
   }
 
   Future<Note?> fetchSingleNote({required int id}) async {
-    print("fetchCalled Single");
+    // print("fetchCalled Single");
     emit(state.copyWith(status: NoteFetchStatus.loading));
     try {
       final note = await NotesDatabase.instance.readNote(id);

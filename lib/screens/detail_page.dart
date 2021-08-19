@@ -18,8 +18,8 @@ class NoteDetailPage extends StatefulWidget {
 class _NoteDetailPageState extends State<NoteDetailPage> {
   @override
   void initState() {
-    BlocProvider.of<NoteFetchCubit>(context).fetchSingleNote(id: widget.id);
     super.initState();
+    BlocProvider.of<NoteFetchCubit>(context).fetchSingleNote(id: widget.id);
   }
 
   @override
@@ -36,6 +36,12 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           default:
             return Scaffold(
               appBar: AppBar(
+                // leading: IconButton(
+                //   onPressed: () {
+                //     Navigator.pop(context, false);
+                //   },
+                //   icon: const Icon(Icons.baby_changing_station),
+                // ),
                 actions: [
                   _editButton(context, state.note!),
                   _deleteButton(context, state.note!.id!),
