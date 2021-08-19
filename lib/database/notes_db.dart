@@ -103,6 +103,19 @@ CREATE TABLE $TableNotes (
     return result.map((json) => Note.fromJson(json)).toList();
   }
 
+  Future<List<Note>> readAllFavNotes() async {
+    final db = await instance.database;
+
+    final orderBy = '$Time ASC';
+    // final result = await db.rawQuery('SELECT * FROM $TableNotes ORDER BY $orderBy');
+    final result = await db.query(
+      TableNotes,
+      orderBy: orderBy,
+      where: IsFav,
+    );
+    return result.map((json) => Note.fromJson(json)).toList();
+  }
+
   //updating note with id
   Future<int> update(Note note) async {
     final db = await instance.database;

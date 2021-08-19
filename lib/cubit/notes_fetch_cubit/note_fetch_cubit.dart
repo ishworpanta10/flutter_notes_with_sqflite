@@ -10,6 +10,8 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
   NoteFetchCubit() : super(NoteFetchState.initial());
 
   Future<void> fetchAllNotes() async {
+    print("fetch All Called");
+
     emit(state.copyWith(status: NoteFetchStatus.loading));
     try {
       final noteList = await NotesDatabase.instance.readAllNotes();
@@ -27,6 +29,7 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
   }
 
   Future<Note?> fetchSingleNote({required int id}) async {
+    print("fetchCalled Single");
     emit(state.copyWith(status: NoteFetchStatus.loading));
     try {
       final note = await NotesDatabase.instance.readNote(id);
@@ -42,5 +45,27 @@ class NoteFetchCubit extends Cubit<NoteFetchState> {
         ),
       );
     }
+  }
+
+  Future<void> fetchAllFavNotes() async {
+    emit(state.copyWith(status: NoteFetchStatus.loading));
+    try {
+      final noteList = await NotesDatabase.instance.readAllFavNotes();
+      emit(
+        state.copyWith(noteList: noteList, status: NoteFetchStatus.loaded),
+      );
+    } catch (err) {
+      // print(err);
+      emit(
+        state.copyWith(
+          status: NoteFetchStatus.error,
+          errorMessage: "Something went wrong !",
+        ),
+      );
+    }
+  }
+
+  Future<void> disposeDb() async {
+    await NotesDatabase.instance.close();
   }
 }

@@ -36,12 +36,6 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           default:
             return Scaffold(
               appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                ),
                 actions: [
                   _editButton(context, state.note!),
                   _deleteButton(context, state.note!.id!),
@@ -53,13 +47,27 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   child: ListView(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     children: [
-                      Text(
-                        state.note!.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              state.note!.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            state.note!.isImportant ? Icons.label_important : null,
+                            color: Colors.teal,
+                          ),
+                          Icon(
+                            state.note!.isFav ? Icons.favorite : null,
+                            color: Colors.red,
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       Text(

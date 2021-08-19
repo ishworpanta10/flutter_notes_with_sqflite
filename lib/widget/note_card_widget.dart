@@ -33,9 +33,24 @@ class NoteCardWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              time,
-              style: const TextStyle(color: Colors.black),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    time,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                Icon(
+                  note.isImportant ? Icons.label_important : null,
+                  color: Colors.teal,
+                ),
+                Icon(
+                  note.isFav ? Icons.favorite : null,
+                  color: Colors.red,
+                ),
+              ],
             ),
             const SizedBox(height: 4),
             Text(

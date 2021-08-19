@@ -8,52 +8,27 @@ import '../model/notes_model.dart';
 import '../widget/note_card_widget.dart';
 import 'add_note.dart';
 import 'detail_page.dart';
-import 'fav_screen.dart';
 
-class NotesScreen extends StatefulWidget {
+class FavScreen extends StatefulWidget {
   @override
-  _NotesScreenState createState() => _NotesScreenState();
+  _FavScreenState createState() => _FavScreenState();
 }
 
-class _NotesScreenState extends State<NotesScreen> {
+class _FavScreenState extends State<FavScreen> {
   @override
   void initState() {
-    BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
+    BlocProvider.of<NoteFetchCubit>(context).fetchAllFavNotes();
     super.initState();
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    BlocProvider.of<NoteFetchCubit>(context).disposeDb();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // print("===============Build Called===============");
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Notes',
+          'Favourite Notes',
           style: TextStyle(fontSize: 24),
         ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => FavScreen(),
-                ),
-              );
-              await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
-            },
-            icon: const Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-          )
-        ],
       ),
       body: Center(
         child: BlocBuilder<NoteFetchCubit, NoteFetchState>(
@@ -85,7 +60,7 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 
   Widget _buildNotes({required List<Note> notes}) => notes.isEmpty
-      ? const Text("No Notes")
+      ? const Text("No Favourite Notes")
       : StaggeredGridView.countBuilder(
           padding: const EdgeInsets.all(8),
           itemCount: notes.length,
@@ -103,7 +78,7 @@ class _NotesScreenState extends State<NotesScreen> {
                     builder: (context) => NoteDetailPage(id: note.id!),
                   ),
                 );
-                await BlocProvider.of<NoteFetchCubit>(context).fetchAllNotes();
+                await BlocProvider.of<NoteFetchCubit>(context).fetchAllFavNotes();
               },
               child: NoteCardWidget(note: note, index: index),
             );
